@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Diary extends Model
 {
-    
+    protected $fillable = [
+        'date',
+        'content',
+        'tag',
+    ];
 }
