@@ -8,11 +8,28 @@ use Illuminate\Http\Request;
 
 class DiaryController extends Controller
 {
-   public function index()
+   public function index(Request $request)
    {
-    $diaries = Diary::all();
-    return view('diaries.index',compact('diaries'));
-   }
+        $query = Diary::query();
+        if($request->date) {
+            $query->whereDate('date',$request->date);
+        }
+        if($request->tag) {
+            $query->where('tag',$request->tag);
+        }
+        $sort = $request->sort ?? 'desc';
+        if($sort === 'asc') {
+            $query->orderBy('date','asc');
+        } else {
+            $query->orderBy('date','desc');
+        }
+        $diaries = $query->get();
+        $tags = Diary::select('tag')
+            ->whereNotNull('tag')
+            ->distinct()
+            ->pluck('tag');
+        return view('diaries.index',compact('diaries','sort','tags'));
+    }
 
    public function store(Request $request)
    {

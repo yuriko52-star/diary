@@ -18,7 +18,32 @@
         <button type="submit">保存</button>
     </form>
 
+    <h2>検索</h2>
+    <form action="/diaries" method="get">
+        <label for="">日付</label>
+        <input type="date" name="date" value="{{ request('date') }}">
+        <select name="tag">
+            <option value="" class="">すべてのタグ</option>
+            @foreach($tags as $tag)
+                <option value="{{ $tag }}" {{ request('tag') == $tag ? 'selected' : ''}}>{{$tag}}</option>
+            @endforeach
+        </select>
+
+        <select name="sort" class="">
+            <option value="desc" {{$sort == 'desc' ? 'selected' : ''}}>新しい順</option>
+            <option value="asc" {{ $sort=='asc' ? 'selected' : ''}}>古い順</option>
+        </select>
+        <button type="submit">検索</button>
+    </form>
+    <p>
+        <a href="/diaries">全件表示に戻る</a>
+    </p>
     
+    <h2>タグ一覧</h2>
+    @foreach($tags as $tag)
+    <a href="/diaries?tag={{$tag}}&sort={{$sort}}" class="">{{$tag}}</a>
+    @endforeach
+    <h2>日記一覧</h2>
         @foreach($diaries as $diary)
            <p> 
             日付:{{ $diary->date }}
